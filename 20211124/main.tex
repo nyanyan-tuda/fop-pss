@@ -273,7 +273,7 @@
       \item \enquote{Verengungskonvertierung}
       \item Konvertierung von Typ mit größerem (oder breiterem) in einen Typ mit kleinerem (oder
       schmalerem) Bereich
-      \item Unichere Konvertierung \(\rightarrow\) Datenverlust
+      \item Unsichere Konvertierung \(\rightarrow\) Datenverlust
     \end{itemize}
     \begin{figure}[h]
       \centering
@@ -323,6 +323,8 @@
       \item Fehlermeldung, falls Cast nicht möglich ist!
       \begin{itemize}
         \item \inlinejava{ClassCastException}
+        \item Typabprüfung mittels Schlüsselwort \inlinejava{instanceof} möglich
+        \item Formaler Aufbau: Objekt \inlinejava{instanceof} Typ
       \end{itemize}
     \end{itemize}
     \begin{figure}[h]
