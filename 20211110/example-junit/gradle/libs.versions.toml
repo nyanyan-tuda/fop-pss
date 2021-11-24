@@ -1,0 +1,7 @@
+[versions]
+gradle = "7.2"
+junit = "5.8.1"
+
+[libraries]
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
