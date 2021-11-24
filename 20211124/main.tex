@@ -1,4 +1,5 @@
 \documentclass{../tuda-beamer}
+\usepackage{wasysym}
 
 
 % Title information
@@ -11,12 +12,21 @@
 
   \maketitle
 
+  \begin{frame}{Überblick}
+    \tableofcontents
+  \end{frame}
+
+
+  \section{Organisatorisches}
   \begin{frame}{Organisatorisches}
     \begin{itemize}
       \item 01.12.2021 Präsenzsprechstunde im Raum in Raum S103/\textbf{103}!
+      \item Aufnahme von Themenwünsche: Bitte spätestens \textbf{Montag} Abend Bescheid geben!
     \end{itemize}
   \end{frame}
 
+
+  \section{Interfaces}
   \begin{frame}{Interfaces}
     \begin{itemize}
       \item Schnittstelle: Trennt, was eine Klasse tut, und wie die Klasse es tut
@@ -101,6 +111,8 @@
     \lstinputlisting[style=Java, title=Klasse ShortbreadBiscuit]{codes/ShortbreadBiscuit.java}
   \end{frame}
 
+
+  \section{Abstrakte Klassen}
   \begin{frame}{Abstrakte Klassen}
     \begin{itemize}
       \item Vorlagen mit Zuständen und Funktionalitäten für Unterklassen
@@ -127,6 +139,8 @@
     \lstinputlisting[style=Java, title=Klasse ArraySelectionSort]{codes/ArraySelectionSort.java}
   \end{frame}
 
+
+  \section{Nützliche Informationen}
   \begin{frame}{Nützliche Informationen}
     \begin{itemize}
       \item Ein Interface kann beliebig viele Interfaces erweitern.
@@ -146,6 +160,8 @@
     \lstinputlisting[style=Java]{codes/Sortable_Identifiable.java}
   \end{frame}
 
+
+  \section{Klassenattribute vs. Objektattribute}
   \begin{frame}{Klassenattribute}
     \begin{itemize}
       \item Statische Attribute sind Eigenschaften, die nicht einzelnen Objekten, sondern deren
@@ -199,6 +215,145 @@
     \lstinputlisting[style=Java]{codes/Person_Example.java}
   \end{frame}
 
+
+  \section{Typumwandlung}
+  \begin{frame}{Typumwandlung}
+    \begin{itemize}
+      \item engl. Casting
+      \item Primitive Datentypen
+      \item Referenztypen
+      \item Impliziter Cast: Typ muss nicht angegeben werden, sondern die Typumwandlung geschieht
+      automatisch
+      \item Expliziter Cast: Typ muss angegeben werden
+      \item Formaler Aufbau: (<Casting Typ>) Literal/Variable/Objekt
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Primitive Datentypen - Widening conversion}
+    \begin{itemize}
+      \item \enquote{Erweiterungskonvertierung}
+      \item Konvertierung von Typ mit kleinerem (oder schmalerem) in einen Typ mit größerem (oder
+      breiterem) Bereich
+      \item Sichere Konvertierung \(\rightarrow\) Kein Datenverlust
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \begin{tikzpicture}[scale=.8,transform shape]
+        \node (bt) {\(2^8\)};
+        \node[right=of {bt}] (st) {\(2^{16}\)};
+        \node[right=of {st}] (it) {\(2^{32}\)};
+        \node[right=of {it}] (lt) {\(2^{64}\)};
+        \node[right=of {lt}] (ft) {\(2^{16}\)};
+        \node[right=of {ft}] (dt) {\(2^{64}\)};
+
+        \node[below=.5cm of {bt}] (bb) {\inlinejava{byte}};
+        \node[below=.5cm of {st}] (sb) {\inlinejava{short}};
+        \node[below=.5cm of {it}] (ib) {\inlinejava{int}};
+        \node[below=.5cm of {lt}] (lb) {\inlinejava{long}};
+        \node[below=.5cm of {ft}] (fb) {\inlinejava{float}};
+        \node[below=.5cm of {dt}] (db) {\inlinejava{double}};
+
+        \node[below=1cm of {bb}] (al) {};
+        \node[below=1cm of {db}] (ar) {};
+
+        \draw[-stealth] (bb) -- node[above] {\(\subseteq\)} (sb);
+        \draw[-stealth] (sb) -- node[above] {\(\subseteq\)} (ib);
+        \draw[-stealth] (ib) -- node[above] {\(\subseteq\)} (lb);
+        \draw[-stealth] (lb) -- node[above] {\(\subseteq\)} (fb);
+        \draw[-stealth] (fb) -- node[above] {\(\subseteq\)} (db);
+
+        \draw[TUDa-9b, -stealth, ultra thick] (al) -- node[below] {Widening}(ar);
+      \end{tikzpicture}
+      \caption{Überblick von widening conversions}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Primitive Datentypen - Narrowing conversion}
+    \begin{itemize}
+      \item \enquote{Verengungskonvertierung}
+      \item Konvertierung von Typ mit größerem (oder breiterem) in einen Typ mit kleinerem (oder
+      schmalerem) Bereich
+      \item Unichere Konvertierung \(\rightarrow\) Datenverlust
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \begin{tikzpicture}[scale=.8,transform shape]
+        \node (bt) {\(2^8\)};
+        \node[right=of {bt}] (st) {\(2^{16}\)};
+        \node[right=of {st}] (it) {\(2^{32}\)};
+        \node[right=of {it}] (lt) {\(2^{64}\)};
+        \node[right=of {lt}] (ft) {\(2^{16}\)};
+        \node[right=of {ft}] (dt) {\(2^{64}\)};
+
+        \node[below=.5cm of {bt}] (bb) {\inlinejava{byte}};
+        \node[below=.5cm of {st}] (sb) {\inlinejava{short}};
+        \node[below=.5cm of {it}] (ib) {\inlinejava{int}};
+        \node[below=.5cm of {lt}] (lb) {\inlinejava{long}};
+        \node[below=.5cm of {ft}] (fb) {\inlinejava{float}};
+        \node[below=.5cm of {dt}] (db) {\inlinejava{double}};
+
+        \node[below=1cm of {bb}] (al) {};
+        \node[below=1cm of {db}] (ar) {};
+
+        \draw[-stealth] (sb) -- node[above] {\(\subseteq\)} (bb);
+        \draw[-stealth] (ib) -- node[above] {\(\subseteq\)} (sb);
+        \draw[-stealth] (lb) -- node[above] {\(\subseteq\)} (ib);
+        \draw[-stealth] (fb) -- node[above] {\(\subseteq\)} (lb);
+        \draw[-stealth] (db) -- node[above] {\(\subseteq\)} (fb);
+
+        \draw[TUDa-9b, -stealth, ultra thick] (ar) -- node[below] {Narrowing}(al);
+      \end{tikzpicture}
+      \caption{Überblick von narrowing conversions}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Primitive Datentypen - Spezialfall}
+    \begin{itemize}
+      \item Konvertierung von \inlinejava{byte} nach \inlinejava{char}
+      \item Widening und narrowing
+      \item \inlinejava{byte} wird zu \inlinejava{int} konvertiert
+      \item \inlinejava{int} wird zu \inlinejava{char} konvertiert
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Referenztypen}
+    \begin{itemize}
+      \item Upcast: Typumwandlung nach oben (bspw. Superklassen)
+      \item Downcast: Typumwandlung nach unten (bspw. Subklassen)
+      \item Fehlermeldung, falls Cast nicht möglich ist!
+      \begin{itemize}
+        \item \inlinejava{ClassCastException}
+      \end{itemize}
+    \end{itemize}
+    \begin{figure}[h]
+      \centering
+      \begin{tikzpicture}[
+        scale=.8,
+        transform shape,
+      ]
+        \begin{scope}[
+          every node/.style={
+          draw,
+          minimum height=1cm,
+          minimum width=2cm,
+          rectangle,
+          },
+        ]
+          \node (parent) {Parent};
+          \node[below=of {parent}] (child) {Child};
+        \end{scope}
+
+        \draw[-stealth, thick] (parent.east) to[bend left=50] node[above, rotate=-90] {Downcast}
+        (child.east);
+        \draw[-stealth, thick] (child.west) to[bend left=50] node[above, rotate=90] {Upcast}
+        (parent.west);
+      \end{tikzpicture}
+      \caption{Überblick Upcast und Downcast}
+    \end{figure}
+  \end{frame}
+
+
+  \section{Arbeitsphase}
   \begin{frame}[c]{Arbeitsphase}
     \begin{center}
       \textbf{\LARGE Selbstständiges Arbeiten}
