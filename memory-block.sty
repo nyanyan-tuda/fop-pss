@@ -1,0 +1,303 @@
+%- Identification -%
+
+% Version
+\def\fileversion{1.00}
+\def\filedate{2021/08/19}
+
+% Sets the LaTeX version for the package to work.
+\NeedsTeXFormat{LaTeX2e}
+
+% LateX 3 Syntax
+\RequirePackage{expl3}
+
+% Identification of the package
+\ProvidesExplPackage{memory-block}
+	{\filedate}
+	{\fileversion}
+	{Memory Block}
+
+%- Packages -%
+
+%-- Graphics --%
+\RequirePackage{tikz}
+
+%- Path -%
+\RequirePackage{xpatch}
+
+%- Patch -%
+
+% Patching  library in expl3 removing white spaces
+\patchcmd
+	{\pgfutil@InputIfFileExists}
+	{\input #1}
+	{%
+		\@pushfilename
+		\xdef\@currname{#1}%
+		\input #1 %
+		\@popfilename
+	}
+	{}{}
+	
+%- Tikz -%
+
+%-- Libraries --%
+\usetikzlibrary{positioning}
+\ExplSyntaxOn
+%-- Style --%
+\tikzset{memory-block-unreserved/.style={
+		draw,
+		line~width=1pt,
+		minimum~height=30pt,
+		node~distance=-1pt,
+		transform~shape,
+		shape=rectangle,
+	}
+}
+
+\tikzset{memory-block-reserved/.style={
+		draw,
+		fill,
+		line~width=1pt,
+		minimum~height=30pt,
+		node~distance=-1pt,
+		transform~shape,
+		shape=rectangle,
+	}
+}
+
+\tikzset{memory-block-dummy/.style={
+		draw,
+		line~width = 1pt,
+		minimum~height=30pt,
+		minimum~width=50pt,
+		node~distance=-1pt,
+		transform~shape,
+		shape=rectangle,
+	}
+}
+
+%- Environment -%
+
+%-- Expansion --%
+\cs_generate_variant:Nn \prop_put:Nnn {Nee}
+\cs_generate_variant:Nn \int_step_variable:nnnNn {eneNn}
+\cs_generate_variant:Nn \int_step_inline:nnnn {enen}
+\cs_generate_variant:Nn \seq_put_right:Nn {Ne}
+\cs_generate_variant:Nn \prop_get:NnNTF {NeNTF}
+
+%-- Options --%
+% Total number of memory blocks
+\int_new:N \l__zentox_memory_size_int
+% Figure scale
+\int_new:N \l__zentox_memory_scale_fp
+
+% Do not make setting globally visible, only for one environment
+\keys_define:nn {zentox/memory}{
+	size .code:n=\int_set:Nn \l__zentox_memory_size_int {#1},
+	size .default:n=30,
+	size .initial:n=30,
+	scale .code:n=\fp_set:Nn \l__zentox_memory_scale_fp {#1},
+	scale .default:n=1,
+	scale .initial:n=1,
+}
+
+%-- Definition -%
+% Allocation of memory
+\int_new:N \l__zentox_memory_allocate_from_int
+\int_new:N \l__zentox_memory_allocate_to_int
+\prop_new:N \l_zentox_memory_reserved_prop
+
+% Assignments
+\prop_new:N \l_zentox_memory_reference_prop
+\quark_new:N \q_memory_assign_sep
+\prop_new:N \l_zentox_memory_assign_seq
+
+\NewDocumentEnvironment{memory}{o}
+{
+	%  Process options
+	\IfNoValueF{#1}{\keys_set:nn {zentox/memory}{#1}}
+	
+	% Allocation of memory - \allocate{start}{end}
+	\NewDocumentCommand\allocate{m m}
+	{
+		% Boundaries
+		\int_compare:nNnTF {##1} < {1}
+		{
+			\int_set:Nn \l__zentox_memory_allocate_from_int {1}
+		}
+		{
+			\int_set:Nn \l__zentox_memory_allocate_from_int {##1}
+		}
+		
+		\int_compare:nNnTF {##2} > {\l__zentox_memory_size_int}
+		{
+			\int_set:Nn \l__zentox_memory_allocate_to_int {\int_eval:n {\l__zentox_memory_size_int}}
+		}
+		{
+			\int_set:Nn \l__zentox_memory_allocate_to_int {\int_eval:n {##2}}
+		}
+		
+		
+		% Start <= end
+		\int_compare:nNnTF {\l__zentox_memory_allocate_from_int} < {\int_eval:n {\l__zentox_memory_allocate_to_int + 1}}
+		{
+			\int_step_variable:eneNn   {\l__zentox_memory_allocate_from_int}{1}{\int_eval:n {\l__zentox_memory_allocate_to_int}}{\l_tmpa_tl}
+			{
+				% Index + node style
+				\prop_put:Nee \l_zentox_memory_reserved_prop {\l_tmpa_tl}{2}
+			}
+		}
+		{}
+	}
+	
+	% Allocation of memory dummy  - \allocatedummy{index}
+	\NewDocumentCommand\allocatedummy{m}
+	{
+		\int_set:Nn \l_tmpa_int {##1}
+		
+		% Boundaries
+		\int_compare:nNnTF {##1} < {1}
+		{
+			\int_set:Nn \l__tmpa_int {1}
+		}
+		\int_compare:nNnTF {##1} > {\l__zentox_memory_size_int}
+		{
+			\int_set:Nn \l__tmpa_int {\l__zentox_memory_size_int}
+		}
+		
+		% Index + node style
+		\prop_put:Nee \l_zentox_memory_reserved_prop {\int_use:N \l_tmpa_int} {3}
+	}
+	
+	% Assign field to memory  - \assign{position to place under block}{position of block}{label}
+	\NewDocumentCommand\assign{m m m}
+	{
+		% Boundaries
+		\int_compare:nNnTF {##1} > {0}
+		{
+			\int_compare:nNnTF {##1} < {\int_eval:n {\l__zentox_memory_size_int + 1}}
+			{
+				% Boundaries
+				\int_compare:nNnTF {##2} > {0}
+				{
+					\int_compare:nNnTF {##2} < {\int_eval:n {\l__zentox_memory_size_int + 1}}
+					{
+						% Insert data if boudnaries correct
+						\seq_clear:N \l_tmpa_seq
+						\seq_put_right:Nn \l_tmpa_seq {##1}
+						\seq_put_right:Nn \l_tmpa_seq {##2}
+						\seq_put_right:Nn \l_tmpa_seq {##3}
+						\seq_put_right:Ne \l_zentox_memory_assign_seq
+						{
+							\seq_use:Nn \l_tmpa_seq { \q_memory_assign_sep }
+						}
+					}
+					{}
+				}
+				{}
+			}
+			{}
+		}
+		{}
+	}
+	
+	% Assign references to assignments - \assignblock{from}{to}
+	\NewDocumentCommand\assignblock{m m}
+	{
+		\prop_put:Nnn \l_zentox_memory_reference_prop {##1}{##2}
+	}
+}
+{
+	% Drawing memory block depending on arguments - \drawblock{type}{index}
+	\NewDocumentCommand\drawblock{m m}
+	{
+		\int_set:Nn \l_tmpa_int {##1}
+		\int_compare:nNnTF {##2} = {1}
+		{
+			\int_case:nn {##1}
+			{
+				% Not reserved memory block
+				{1} {\node[style=memory-block-unreserved] (##2) {};}
+				% Reserved memory block
+				{2} {\node[style=memory-block-reserved] (##2) {};}
+				% Dummy memory block
+				{3} {\node[style=memory-block-dummy] (##2) {...};}
+			}
+		}
+		{
+			\int_case:nn {##1}
+			{
+				% Not reserved memory block
+				{1}
+				{
+					\node[
+					style=memory-block-unreserved,
+					right=of~{\int_eval:n {##2 - 1}}
+					] (##2) {};
+					
+				}
+				% Reserved memory block
+				{2}
+				{
+					\node[
+					style=memory-block-reserved,
+					right=of~{\int_eval:n {##2 - 1}}
+					] (##2) {};
+					
+				}
+				% Dummy memory block
+				{3}
+				{
+					\node[
+					style=memory-block-dummy,
+					right=of~{\int_eval:n {##2 - 1}}
+					] (##2) {...};
+					
+				}
+			}
+		}
+	}
+	% Draw memory blocks
+	\begin{tikzpicture}[transform~shape, scale=\fp_use:N \l__zentox_memory_scale_fp]
+		\int_step_inline:enen {1}{1}{\int_use:N \l__zentox_memory_size_int}
+		{
+			% Memory-block reserved or dummy
+			\prop_get:NeNTF \l_zentox_memory_reserved_prop {##1} \l_tmpa_tl
+			{
+				
+				\drawblock{\l_tmpa_tl}{##1}
+			}
+			{
+				% Not reserved memory block
+				\drawblock{1}{##1}
+			}
+		}
+		
+		\int_zero:N \l_tmpa_int
+		
+		\int_step_inline:nn {\seq_count:N \l_zentox_memory_assign_seq}
+		{
+			% Reconstitute the stored sequences
+			\seq_pop_left:NN \l_zentox_memory_assign_seq \l_tmpa_tl
+			\seq_set_split:NnV \l_tmpa_seq {\q_memory_assign_sep} \l_tmpa_tl
+			
+			\tl_set:Nn \l_tmpa_tl {\seq_item:Nn \l_tmpa_seq {1}\seq_item:Nn \l_tmpa_seq {2}}
+			% Draw node containing the assignment label
+			\node[below=of~{\seq_item:Nn \l_tmpa_seq {1}}] (a\l_tmpa_tl) {\seq_item:Nn \l_tmpa_seq {3}};
+			% Draw assignment to memory block
+			\draw[dashed] (a\l_tmpa_tl.north) -- (\seq_item:Nn \l_tmpa_seq {2}.south);
+		}
+		
+		% Draw references
+		\prop_map_inline:Nn \l_zentox_memory_reference_prop
+		{
+			\int_compare:nNnTF {##1} < {##2}
+			{
+				\draw [dashed, -stealth, thick] (##1.north) edge[bend~left=55] (##2.north);
+			}
+			{
+				\draw [dashed, -stealth, thick] (##1.north) edge[bend~right=55] (##2.north);
+			}
+		}
+	\end{tikzpicture}
+}
