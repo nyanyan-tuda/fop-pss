@@ -3,6 +3,7 @@
 - engl. Functional and object-oriented programming concepts
 - Wintersemester 2021/2022
 - Präsenzsprechstunde (Presence consultation)
+- Main language: German
 
 ## Disclaimer
 
