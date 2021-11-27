@@ -289,6 +289,9 @@ TSWLatexianTemp*
 #*Notes.bib
 
 
+# Others
+*.len
+
 ### Linux ###
 *~
 .fuse_hidden*
