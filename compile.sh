@@ -56,7 +56,9 @@ for path in $PATHS_TEX; do
   output_dir="$DIR_DESTINATION/$pdf"
 
   # Check if compiling is necessary
-  if [[ $compile_all == true ]] || [[ $EXISTS_OUTPUT_DIR == false ]]; then
+  found=$(find "$DIR_BASE" -name "$pdf" | wc -l)
+  if [[ $compile_all == true ]] || [[ $EXISTS_OUTPUT_DIR == false ]] ||
+    [[ $found -eq 0 ]]; then
     generate=true
   else
     # Check for file changes
