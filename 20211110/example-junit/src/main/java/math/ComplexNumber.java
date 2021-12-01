@@ -35,6 +35,7 @@ public class ComplexNumber {
    *
    * @param real      the real part of the complex number
    * @param imaginary the imaginary part of the complex number
+   *
    * @return the constructed complex number
    */
   public static ComplexNumber of(final double real, final double imaginary) {
@@ -63,6 +64,7 @@ public class ComplexNumber {
    * Computes the sum of this complex number with the other complex number.
    *
    * @param other the summand to be added
+   *
    * @return the sum of this complex number with the other complex number
    */
   public ComplexNumber plus(ComplexNumber other) {
@@ -73,32 +75,11 @@ public class ComplexNumber {
    * Computes the difference of this complex number with the other complex number.
    *
    * @param other the subtrahend to be subtracted
+   *
    * @return the difference of this complex number with the other complex number
    */
   public ComplexNumber minus(ComplexNumber other) {
     return new ComplexNumber(real - other.real, imaginary - other.imaginary);
-  }
-
-  /**
-   * Computes the product of this complex number with the other complex number.
-   *
-   * @param other the factor to be multiplied
-   * @return the product of this complex number with the other complex number
-   */
-  public ComplexNumber times(ComplexNumber other) {
-    final var real = this.real * other.real - this.imaginary * other.imaginary;
-    final var imaginary = this.real * other.imaginary + this.imaginary * other.real;
-    return new ComplexNumber(real, imaginary);
-  }
-
-  /**
-   * Computes the quotient  of this complex number with the other complex number.
-   *
-   * @param other the divisor  to be divided
-   * @return the quotient  of this complex number with the other complex number
-   */
-  public ComplexNumber divides(ComplexNumber other) {
-    return this.times(other.reciprocal());
   }
 
   /**
@@ -125,6 +106,7 @@ public class ComplexNumber {
    * Computes the scaling of this complex number with the specified scaling factor.
    *
    * @param factor the scaling factor
+   *
    * @return the scaling of this complex number with the specified scaling factor
    */
   public ComplexNumber scale(double factor) {
@@ -142,16 +124,6 @@ public class ComplexNumber {
   }
 
   /**
-   * Computes the reciprocal of this complex number.
-   *
-   * @return the reciprocal of this complex number
-   */
-  public ComplexNumber reciprocal() {
-    final var scale = real * real + imaginary * imaginary;
-    return new ComplexNumber(real / scale, -imaginary / scale);
-  }
-
-  /**
    * Computes the exponential form of this complex number.
    *
    * @return the exponential form of this complex number
@@ -160,6 +132,26 @@ public class ComplexNumber {
     final var real = Math.exp(this.real) * Math.cos(this.imaginary);
     final var imaginary = Math.exp(this.real) * Math.sin(this.imaginary);
     return new ComplexNumber(real, imaginary);
+  }
+
+  /**
+   * Computes the tangent of this complex number.
+   *
+   * @return the tangent of this complex number
+   */
+  public ComplexNumber tan() {
+    return this.sin().divides(this.cos());
+  }
+
+  /**
+   * Computes the quotient  of this complex number with the other complex number.
+   *
+   * @param other the divisor  to be divided
+   *
+   * @return the quotient  of this complex number with the other complex number
+   */
+  public ComplexNumber divides(ComplexNumber other) {
+    return this.times(other.reciprocal());
   }
 
   /**
@@ -173,7 +165,6 @@ public class ComplexNumber {
     return new ComplexNumber(real, imaginary);
   }
 
-
   /**
    * Computes the cosine of this complex number.
    *
@@ -186,12 +177,44 @@ public class ComplexNumber {
   }
 
   /**
-   * Computes the tangent of this complex number.
+   * Computes the product of this complex number with the other complex number.
    *
-   * @return the tangent of this complex number
+   * @param other the factor to be multiplied
+   *
+   * @return the product of this complex number with the other complex number
    */
-  public ComplexNumber tan() {
-    return this.sin().divides(this.cos());
+  public ComplexNumber times(ComplexNumber other) {
+    final var real = this.real * other.real - this.imaginary * other.imaginary;
+    final var imaginary = this.real * other.imaginary + this.imaginary * other.real;
+    return new ComplexNumber(real, imaginary);
+  }
+
+  /**
+   * Computes the reciprocal of this complex number.
+   *
+   * @return the reciprocal of this complex number
+   */
+  public ComplexNumber reciprocal() {
+    final var scale = real * real + imaginary * imaginary;
+    return new ComplexNumber(real / scale, -imaginary / scale);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(real, imaginary);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this==o) {
+      return true;
+    }
+    if (!(o instanceof ComplexNumber)) {
+      return false;
+    }
+    final ComplexNumber that = (ComplexNumber) o;
+    return Double.compare(that.real, real)==0
+      && Double.compare(that.imaginary, imaginary)==0;
   }
 
   @Override
@@ -200,23 +223,5 @@ public class ComplexNumber {
       return String.format("%f - %fi", real, -imaginary);
     }
     return String.format("%f + %fi", real, imaginary);
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof ComplexNumber)) {
-      return false;
-    }
-    final ComplexNumber that = (ComplexNumber) o;
-    return Double.compare(that.real, real) == 0
-        && Double.compare(that.imaginary, imaginary) == 0;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(real, imaginary);
   }
 }
