@@ -184,8 +184,8 @@ minimum height = 4em
     \end{figure}
   \end{frame}
 
-
-  \section{\texorpdfstring{Statischer Typ \(\neq\) \inlinejava{static}}{Statischer Typ != static}}
+  \subsection{\texorpdfstring{Statischer Typ \(\neq\) \inlinejava{static}}{Statischer Typ !=
+    static}}
   \begin{frame}{Statischer Typ \(\neq\) \inlinejava{static}}
     \begin{itemize}
       \item Statischer Typ: Typ einer Variable, die bei der Variablendeklaration angegeben ist.
@@ -197,6 +197,87 @@ minimum height = 4em
         title=Schlüsselwort static
       ] {codes/sum_iterative.java}
     \end{itemize}
+  \end{frame}
+
+  \subsection{Beispiel - Athene Karte}
+  \begin{frame}{Beispiel - Athene Karte}
+    \begin{itemize}
+      \item Modellierung der Athene Karte
+      \item Enthält Namen eines Universitätsmitglied und weitere Information
+    \end{itemize}
+
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=.3\linewidth]{graphics/athena_card_dummy}
+      \caption{Quelle: \url{https://www.physik.tu-darmstadt.de/internationales/incoming/general_information_1/athene_card_1/athenecard.en.jsp}}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}[c]
+    \begin{figure}[h]
+      \centering
+      \begin{tikzpicture}[scale=.7, transform shape]
+        \begin{scope}[
+          every node/.style={
+          draw,
+          line width=1pt,
+          minimum height=40pt,
+          minimum width=80pt,
+          transform shape,
+          shape=rectangle,
+          }
+        ]
+          \node (a) at (0, 0) {UniversityMember};
+          \node (b) at (-5, -3) {Student};
+          \node (c) at (5, -3) {Employee};
+          \node (d) at (5, -6) {Professor};
+
+          \draw[-stealth] (0, -1.5) -- (a);
+          \draw (b.north) -- (-5, -1.5) -- (0, -1.5);
+          \draw (c.north) -- (5, -1.5) -- (0, -1.5);
+          \draw[-stealth] (d) -- (c);
+        \end{scope}
+
+        \draw[-stealth, ultra thick] (11, -7) -- node[rotate=90, above] {\Large Generalisierung}
+        (11, 1);
+        \draw[-stealth, ultra thick] (11.5, 1) -- node[rotate=270, above] {\Large Spezialisierung}
+        (11.5, -7);
+      \end{tikzpicture}
+      \caption{Typhierarchie - Universitätsmitglieder}
+    \end{figure}
+  \end{frame}
+  \begin{frame}[allowframebreaks, c]
+    \lstinputlisting[style=Java, title=Klasse UniversityMember]{codes/UniversityMember.java}
+  \end{frame}
+
+  \begin{frame}{Dokumentation von nicht implementierten Methoden}
+    \begin{itemize}
+      \item Spezifiziert die Funktionalität der Methode, welche von Subklassen eingehalten werden
+      müssen
+      \item Subklassen können den Vertrag spezifizieren
+    \end{itemize}
+
+    \lstinputlisting[style=Java]{codes/UniversityMember_getID.java}
+  \end{frame}
+
+  \begin{frame}[allowframebreaks, c]
+    \lstinputlisting[style=Java, title=Klasse Student]{codes/Student.java}
+  \end{frame}
+
+  \begin{frame}[c]
+    \lstinputlisting[style=Java]{codes/Student_getID.java}
+  \end{frame}
+
+  \begin{frame}[allowframebreaks, c]
+    \lstinputlisting[style=Java, title=Enum Department]{codes/Department.java}
+  \end{frame}
+
+  \begin{frame}[allowframebreaks, c]
+    \lstinputlisting[style=Java, title=Klasse Employee]{codes/Employee.java}
+  \end{frame}
+
+  \begin{frame}[allowframebreaks, c]
+    \lstinputlisting[style=Java, title=Klasse Professor]{codes/Professor.java}
   \end{frame}
 
 
