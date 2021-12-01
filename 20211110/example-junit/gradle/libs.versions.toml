@@ -1,5 +1,5 @@
 [versions]
-gradle = "7.2"
+gradle = "7.3"
 junit = "5.8.1"
 
 [libraries]
