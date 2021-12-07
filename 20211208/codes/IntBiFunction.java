@@ -1,5 +1,5 @@
 @FunctionalInterface
-public interface IntFunction {
+public interface IntBiFunction {
 
   int apply(int a, int b);
 }

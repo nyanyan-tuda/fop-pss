@@ -1,4 +1,4 @@
-IntFunction fct;
+IntBiFunction fct;
 
 fct = (a, b) -> a + b;
 fct = (a, b) -> return a + b;
