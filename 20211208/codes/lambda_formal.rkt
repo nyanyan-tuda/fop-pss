@@ -1,2 +1,2 @@
-(lambda (Argumente*) Operation)
-($\textcolor{keywordcolor}{\lambda}$ (Argumente*) Operation)
+(lambda (arguments*) expression)
+($\textcolor{keywordcolor}{\lambda}$ (arguments*) expression)
