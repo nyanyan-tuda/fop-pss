@@ -1,4 +1,4 @@
-Parameter -> Operation;
+Parameter -> Expression;
 (Parameter, ...) -> {
-  Operationen;
+  Expression; ...
 };
