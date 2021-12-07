@@ -1,0 +1,4 @@
+Parameter -> Operation;
+(Parameter, ...) -> {
+  Operationen;
+};
