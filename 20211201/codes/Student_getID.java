@@ -5,6 +5,6 @@
  * @return the unique identification of this student
  */
 @Override
-public String getID() {
-  return String.format("Enrolment number: %07d", id);
-}
+public String getID(){
+    return String.format("Enrolment number: %07d",id);
+    }
