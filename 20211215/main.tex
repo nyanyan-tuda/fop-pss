@@ -23,20 +23,18 @@
 
     \maketitle
 
+    \begin{frame}[c]{Hinweis}
+        \begin{center}
+            12.01.2022 Präsenzsprechstunde B im Raum in Raum S103/\textbf{123}!
+        \end{center}
+    \end{frame}
+
     \begin{frame}{Überblick}
         \tableofcontents
     \end{frame}
 
 
-    \section{Organisatorisches}
-    \begin{frame}{Organisatorisches}
-        \begin{itemize}
-            \item 12.01.2022 Präsenzsprechstunde im Raum in Raum S103/\textbf{123}!
-        \end{itemize}
-    \end{frame}
-
-
-    \section{Rekursion}
+    \section{Rekursion [25min]}
     \begin{frame}[c]{Rekursion}
         \begin{center}
             \enquote{Eine Rekursion ist eine Funktion, die sich selbst aufruft. Dabei wird versucht
@@ -45,10 +43,32 @@
         \end{center}
     \end{frame}
 
+    \subsection{Vorgehensweise bei rekursiven Aufgaben}
+    \begin{frame}{Vorgehensweise bei rekursiven Aufgaben}
+        \begin{enumerate}
+            \item Identifiziere, wie das Problem auf eine einfachere Variante des Problems
+            zerlegt werden kann und direkt gelöst werden kann
+
+            \begin{itemize}
+                \item Teillösungen der Gesamtlösung
+            \end{itemize}
+            \item Das kleinste Problem ist ein Rekursionsanker
+            \item Überlege, wie die kleinen Problemen kombiniert werden können, um die
+            ursprüngliche Problemstellung zu lösen
+            \item Kombiniere die Teillösungen zu einer Gesamtlösung
+        \end{enumerate}
+    \end{frame}
+
     \subsection{Rekursive Auswertung von Arithmetischen Ausdrücken in Präfix-Notation}
     \begin{frame}{Rekursive Auswertung von Arithmetischen Ausdrücken in Präfix-Notation}
         \begin{itemize}
             \item \href{https://moodle.informatik.tu-darmstadt.de/pluginfile.php/202303/mod_resource/content/3/uebung06.pdf}{Blatt 06 H4}
+            \item Prfäix-Notation Beispiele:
+            \begin{itemize}
+                \item \(+ 2 \ 3 = 5\)
+                \item \(* - 1 2 3 = * (-1 2) 3 = - 3\)
+                \item \(+ 4 - 5 1 = + 4 (- 5 1) = 8\)
+            \end{itemize}
         \end{itemize}
 
         \begin{table}[h]
@@ -85,7 +105,7 @@
         \lstinputlisting[style=Java]{codes/ReturnData.java}
     \end{frame}
 
-    \begin{frame}[c]
+    \begin{frame}[c]{H4.2: Methoden \inlinejava{evaluate} und \inlinejava{evaluateRecursively}}
         Erweitern Sie Klasse \inlinejava{StrangeThings} aus 2 um eine
         \inlinejava{public}-\highlight{Klassenmethode \inlinejava{evaluate}}, die den Wert eines
         \highlight{arithmetischen Ausdrucks} in \highlight{Präfix-Notation} (das heißt: zuerst
@@ -138,18 +158,16 @@
         das Zeichen \inlinejava{'-'}} enthält und der mit der \inlinejava{char}-Kette
         repräsentierte Präfix-Ausdruck ein korrekt gebildeteter Präfix-Ausdruck ist, in dem
         \highlight{jede Subtraktion genau zwei Operanden} hat.
-    \end{frame}
 
-    \begin{frame}[c]
+        \pause
+
+        \vskip 1em
+
         \begin{note}[title=Information:]
             Beim Parameterwert wird zwischen dem aktualen Wert (der Parameterwert, der eingesetzt
             wird) und dem formalen Wert (der in der Definition des Parameters in der Methode
             steht) unterschieden.
         \end{note}
-
-        \vskip 1em
-
-        \lstinputlisting[style=Java]{codes/evaluate_01.java}
     \end{frame}
 
     \begin{frame}[c]
@@ -173,24 +191,6 @@
     \end{frame}
 
     \begin{frame}[c]
-        \begin{itemize}
-            \item \inlinejava{array}: Enthält den arithmetischen Ausdruck, bspw.
-            \inlinejava{['-', '1', '2']}
-            \item \inlinejava{startIndex}: Aktualler Index beim Durchlauf durch das Array
-            \inlinejava{array}
-            \item \inlinejava{ReturnData}
-            \begin{itemize}
-                \item \inlinejava{result}: Enthält das Ergebnis des bisher berechneten Teilausdrucks
-                \item \inlinejava{nextIndex}: Gibt den ersten Index des nächsten Teilausdrucks an
-            \end{itemize}
-        \end{itemize}
-
-        \vskip 1em
-
-        \lstinputlisting[style=Java]{codes/evaluate_02.java}
-    \end{frame}
-
-    \begin{frame}[c]
         Die Methode \inlinejava{evaluate} ruft die Methode
         \highlight{\inlinejava{evaluateRecursively}} auf, wobei \inlinejava{evaluateRecursively}
         als ersten aktualen Parameter den \highlight{ersten aktualen Parameter von}
@@ -200,10 +200,6 @@
         \inlinejava{evaluateRecursively} liefert die Methode \inlinejava{evaluate} den Wert des
         Objektattributs \highlight{\inlinejava{result}} des von \inlinejava{evaluateRecursively}
         gelieferten Objekts vom Typ \highlight{\inlinejava{ReturnData}}.
-    \end{frame}
-
-    \begin{frame}[c]
-        \lstinputlisting[style=Java]{codes/evaluate_03.java}
     \end{frame}
 
     \begin{frame}[c]
@@ -228,23 +224,37 @@
         ein geeignetes \highlight{\inlinejava{ReturnData}}-Objekt zurückgegeben werden.
 
         \vskip 1em
+
         Implementieren Sie die Methoden \inlinejava{evaluate} und
         \inlinejava{evaluateRecursively} wie beschrieben.
     \end{frame}
 
-    \begin{frame}{Vorgehensweise bei rekursiven Aufgaben}
-        \begin{enumerate}
-            \item Identifiziere, wie das Problem auf eine einfachere Variante des Problems
-            zerlegt werden kann und direkt gelöst werden kann
-
+    \begin{frame}[c]
+        \begin{itemize}
+            \item \inlinejava{array}: Enthält den arithmetischen Ausdruck, bspw.
+            \inlinejava{['-', '1', '2']}
+            \item \inlinejava{startIndex}: Aktualler Index beim Durchlauf durch das Array
+            \inlinejava{array}
+            \item \inlinejava{ReturnData}
             \begin{itemize}
-                \item Teillösungen der Gesamtlösung
+                \item \inlinejava{result}: Enthält das Ergebnis des bisher berechneten Teilausdrucks
+                \item \inlinejava{nextIndex}: Gibt den ersten Index des nächsten Teilausdrucks an
             \end{itemize}
-            \item Das kleinste Problem ist ein Rekursionsanker
-            \item Überlege, wie die kleinen Problemen kombiniert werden können, um die
-            ursprüngliche Problemstellung zu lösen
-            \item Kombiniere die Teillösungen zu einer Gesamtlösung
-        \end{enumerate}
+        \end{itemize}
+
+        \vskip 1em
+
+        \lstinputlisting[style=Java]{codes/evaluate_02.java}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Hauptrekursion wird in der Hilfsmethode \inlinejava{evaluateRecursively}
+            durchgeführt
+            \item \inlinejava{ReturnData} enthält das Ergebnis der Auswertung
+        \end{itemize}
+
+        \lstinputlisting[style=Java]{codes/evaluate_03.java}
     \end{frame}
 
     \begin{frame}
@@ -353,7 +363,7 @@
             \caption{evaluateRecursively(array, startIndex)}
             \begin{algorithmic}[1]
                 \If{array[startIndex] is a digit}
-                    \State \Return array[startIndex] \textbf{and} startIndex + 1
+                    \State \Return array[startIndex], startIndex + 1
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
@@ -435,7 +445,7 @@
                     \node[right=of {5}] (6) {4};
                 \end{scope}
 
-                \node[below left=3.5cm and 21m of {0}] (op1) {Operator};
+                \node[below left=3.5cm and 1cm of {0}] (op1) {Operator};
                 \node[below=of {1}] (op2) {Operator};
                 \node[below=of {4}] (op3) {Operator};
                 \node[below=of {op1}] (exp1) {Ausdruck};
@@ -458,8 +468,8 @@
 
                 \draw[-latex] (op1.east) -- (exp2.south);
                 \draw[-latex] (op1.east) -- (exp3.south);
-
             \end{tikzpicture}
+            \caption{Visualisierung der Auswertung}
         \end{figure}
     \end{frame}
 
@@ -529,7 +539,7 @@
     \end{frame}
 
 
-    \section{Arbeitsphase}
+    \section{Arbeitsphase [75min]}
     \begin{frame}[c]{Arbeitsphase}
         \begin{center}
             \textbf{\LARGE Selbstständiges Arbeiten}
