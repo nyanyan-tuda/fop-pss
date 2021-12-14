@@ -17,7 +17,7 @@
 
 ## Installation
 
-### Compile LaTeX   
+### Compile LaTeX
 
 The custom packages must exist on the TeX path so that the packages can be used.
 
@@ -40,6 +40,6 @@ Optional arguments:
 
 - `-all`: Compiles all TeX source files
 - `[0-9]+`: A number which specifies how often the TeX source should be compiled. Default number is
-  2.
+    2.
 
 Note that a TeX distribution and the package `tuda-ci` must be available.
