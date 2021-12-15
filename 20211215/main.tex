@@ -65,9 +65,9 @@
             \item \href{https://moodle.informatik.tu-darmstadt.de/pluginfile.php/202303/mod_resource/content/3/uebung06.pdf}{Blatt 06 H4}
             \item Präfix-Notation Beispiele:
             \begin{itemize}
-                \item \(+ 2 \ 3 = 5\)
-                \item \(* - 1 2 3 = * (-1 2) 3 = - 3\)
-                \item \(+ 4 - 5 1 = + 4 (- 5 1) = 8\)
+                \item \(+ \ 2 \ 3 = 5\)
+                \item \(* \ - \ 1 \ 2 \ 3 = * \ (-1 \ 2) \ 3 = -3\)
+                \item \(+ \ 4 \ - \ 5 \ 1 = + \ 4 \ (- \ 5 \ 1) = 8\)
             \end{itemize}
         \end{itemize}
 
@@ -154,10 +154,10 @@
         \enquote{\highlight{Array} vom primitiven Typ \highlight{\inlinejava{char}}} und Rückgabetyp
         \highlight{\inlinejava{int}}. Die Methode \inlinejava{evaluate} darf ohne Überprüfung
         davon ausgehen, dass das Array \highlight{mindestens die Länge 1} hat, jede Komponente
-        des Arrays entweder \highlight{eine Ziffer \inlinejava{'0'}, \dots, \inlinejava{'9'} oder
+        des Arrays entweder \highlight{eine} \highlight{Ziffer \inlinejava{'0'}, \dots, \inlinejava{'9'} oder
         das Zeichen \inlinejava{'-'}} enthält und der mit der \inlinejava{char}-Kette
         repräsentierte Präfix-Ausdruck ein korrekt gebildeteter Präfix-Ausdruck ist, in dem
-        \highlight{jede Subtraktion genau zwei Operanden} hat.
+        \highlight{jede Subtraktion genau} \highlight{zwei Operanden} hat.
 
         \pause
 
@@ -227,6 +227,15 @@
 
         Implementieren Sie die Methoden \inlinejava{evaluate} und
         \inlinejava{evaluateRecursively} wie beschrieben.
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Eingabe: \inlinejava{char}-Array (Arithmetischer Ausdruck)
+            \item Rückgabe: \inlinejava{int} (Auswertung des arithmetischen Ausdrucks)
+        \end{itemize}
+
+        \lstinputlisting[style=Java]{codes/evaluate_01.java}
     \end{frame}
 
     \begin{frame}[c]
@@ -550,7 +559,7 @@
 
     \begin{frame}[c]{Beispielauswertung von \inlinejava{evaluateRecursively}}
         \begin{itemize}
-            \item \inlinejava{array = {'-', '-', '1', '2', '-', '3', '4'}}
+            \item \inlinejava{array = ['-', '-', '1', '2', '-', '3', '4']}
             \item Auswertung von \inlinejava{evaluateRecursively(array, 0)}
         \end{itemize}
 
