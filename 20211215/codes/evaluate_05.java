@@ -8,6 +8,6 @@ private static ReturnData evaluateRecursively(char[] array, int startIndex) {
     ReturnData rightOperand = evaluateRecursively(array,
         leftOperand.nextIndex);
     return new ReturnData(
-        leftOperand.result + rightOperand.result,
+        leftOperand.result - rightOperand.result,
         rightOperand.nextIndex);
 }
