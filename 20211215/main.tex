@@ -53,7 +53,7 @@
                 \item Teillösungen der Gesamtlösung
             \end{itemize}
             \item Das kleinste Problem ist ein Rekursionsanker
-            \item Überlege, wie die kleinen Problemen kombiniert werden können, um die
+            \item Überlege, wie die kleinen Probleme kombiniert werden können, um die
             ursprüngliche Problemstellung zu lösen
             \item Kombiniere die Teillösungen zu einer Gesamtlösung
         \end{enumerate}
@@ -233,7 +233,7 @@
         \begin{itemize}
             \item \inlinejava{array}: Enthält den arithmetischen Ausdruck, bspw.
             \inlinejava{['-', '1', '2']}
-            \item \inlinejava{startIndex}: Aktualler Index beim Durchlauf durch das Array
+            \item \inlinejava{startIndex}: Aktueller Index beim Durchlauf durch das Array
             \inlinejava{array}
             \item \inlinejava{ReturnData}
             \begin{itemize}
@@ -376,7 +376,7 @@
     \begin{frame}
         \begin{enumerate}
             \setcounter{enumi}{2}
-            \item Überlege, wie die kleinen Problemen kombiniert werden können, um die
+            \item Überlege, wie die kleinen Probleme kombiniert werden können, um die
             ursprüngliche Problemstellung zu lösen
         \end{enumerate}
 
@@ -397,7 +397,7 @@
                 \Else
                     \State leftOperand \(\leftarrow\) evaluateRecursively(array, \dots)
                     \State rightOperand \(\leftarrow\) evaluateRecursively(array, \dots)
-                    \State \Return leftOperand.result + rightOperand.result, \dots
+                    \State \Return leftOperand.result - rightOperand.result, \dots
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
@@ -417,7 +417,7 @@
                 \Else
                     \State leftOperand \(\leftarrow\) evaluateRecursively(array, \dots)
                     \State rightOperand \(\leftarrow\) evaluateRecursively(array, \dots)
-                    \State \Return leftOperand.result + rightOperand.result, \dots
+                    \State \Return leftOperand.result - rightOperand.result, \dots
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
@@ -486,7 +486,7 @@
                 \Else
                     \State leftOperand \(\leftarrow\) evaluateRecursively(array, startIndex + 1)
                     \State rightOperand \(\leftarrow\) evaluateRecursively(array, \dots)
-                    \State \Return leftOperand.result + rightOperand.result, \dots
+                    \State \Return leftOperand.result - rightOperand.result, \dots
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
@@ -494,7 +494,7 @@
 
     \begin{frame}{Rechter Operand}
         \begin{itemize}
-            \item Wir müssen rekursiv nach dem letzten besuchten Index von dem linken Operand
+            \item Wir müssen rekursiv nach dem letzten besuchten Index vom linken Operanden
             abprüfen
         \end{itemize}
 
@@ -507,7 +507,7 @@
                     \State leftOperand \(\leftarrow\) evaluateRecursively(array, startIndex + 1)
                     \State rightOperand \(\leftarrow\) evaluateRecursively(array, leftOperand
                     .nextIndex)
-                    \State \Return leftOperand.result + rightOperand.result, \dots
+                    \State \Return leftOperand.result - rightOperand.result, \dots
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
@@ -515,8 +515,8 @@
 
     \begin{frame}{Kombination}
         \begin{itemize}
-            \item Der nächste Index nach der Kombination ist der Index nach der Auswertung von
-            dem rechten Teilausdruck
+            \item Der nächste Index nach der Kombination ist der Index nach der Auswertung vom
+            rechten Teilausdruck
         \end{itemize}
 
         \begin{algorithm}[H]
@@ -528,7 +528,7 @@
                     \State leftOperand \(\leftarrow\) evaluateRecursively(array, startIndex + 1)
                     \State rightOperand \(\leftarrow\) evaluateRecursively(array, leftOperand
                     .nextIndex)
-                    \State \Return leftOperand.result + rightOperand.result, rightOperand.nextIndex
+                    \State \Return leftOperand.result - rightOperand.result, rightOperand.nextIndex
                 \EndIf
             \end{algorithmic}
         \end{algorithm}
