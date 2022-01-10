@@ -35,8 +35,8 @@ else
 fi
 
 # Auxiliaries files
-AUXILARIES="log,aux,dvi,lof,lot,bit,idx,glo,bbl,bcf,ilg,toc,ind,out,blg,fdb_latexmk,fls,run.xml,"
-AUXILARIES="${AUXILARIES}len,nav,snm,synctex.gz,xmpdata,xmpi"
+AUXILIARIES="log,aux,dvi,lof,lot,bit,idx,glo,bbl,bcf,ilg,toc,ind,out,blg,fdb_latexmk,fls,run.xml,"
+AUXILIARIES="${AUXILARIES}len,nav,snm,synctex.gz,xmpdata,xmpi"
 IFS=, read -ra AUXILARIES <<<"$AUXILARIES"
 
 # Generates an output directory for the compiled eX files.
