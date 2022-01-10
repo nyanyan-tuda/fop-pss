@@ -1,3 +1,3 @@
-public static int evaluate(char[] array) {
+public static int evaluate(char[]array){
     // TODO
-}
+    }

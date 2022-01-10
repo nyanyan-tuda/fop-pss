@@ -24,12 +24,12 @@
 
 %- Preconfiguration -%
 \LoadClass[
-  aspectratio=169,
-  authorontitle=true,
-  color={accentcolor=3b},
-  colorframetitle=false,
-  logo=true,
-  ngerman,
+    aspectratio=169,
+    authorontitle=true,
+    color={accentcolor=3b},
+    colorframetitle=false,
+    logo=true,
+    ngerman,
 ]{tudabeamer}
 
 % Document color
@@ -84,10 +84,10 @@
 {\pgfutil@InputIfFileExists}
 {\input #1}
 {%
-  \@pushfilename
-  \xdef\@currname{#1}%
-  \input #1 %
-  \@popfilename
+    \@pushfilename
+    \xdef\@currname{#1}%
+    \input #1 %
+    \@popfilename
 }
 {}{}
 
@@ -117,68 +117,68 @@
 % Box options
 % Do not make setting globally visible, only for one environment
 \keys_define:nn {ptxcd/notebox}{
-  title .code:n=\tl_set:Nn \l__ptxcd_box_title_tl {#1},
-  title .default:n=,
-  title .initial:n=,
-  break .bool_set:N  = \l__ptxcd_box_title_break_bool,
-  break .default:n = true,
-  break .initial:n  = false,
-  color .code:n=\str_set:Nx \l__ptxcd_box_color_str {#1},
-  color .default:n=\g_ptxcd_color_accent_tl,
-  color .initial:n=\g_ptxcd_color_accent_tl
+    title .code:n=\tl_set:Nn \l__ptxcd_box_title_tl {#1},
+    title .default:n=,
+    title .initial:n=,
+    break .bool_set:N  = \l__ptxcd_box_title_break_bool,
+    break .default:n = true,
+    break .initial:n  = false,
+    color .code:n=\str_set:Nx \l__ptxcd_box_color_str {#1},
+    color .default:n=\g_ptxcd_color_accent_tl,
+    color .initial:n=\g_ptxcd_color_accent_tl
 }
 
 % Note box environment
 \DeclareDocumentEnvironment{note}{o}
 {
 %  Process options
-  \IfNoValueF{#1}{\keys_set:nn {ptxcd/notebox}{#1}}
-  % Retrieve color
-  \str_set:Nx \l__ptxcd_box_color_apply_str {\str_use:N \l__ptxcd_box_color_str}
+    \IfNoValueF{#1}{\keys_set:nn {ptxcd/notebox}{#1}}
+    % Retrieve color
+    \str_set:Nx \l__ptxcd_box_color_apply_str {\str_use:N \l__ptxcd_box_color_str}
 % Check if the color is a predefined tuda color and retrieve color value
-  \prop_if_in:NVT \l__ptxcd_box_color_tuda_prop \l__ptxcd_box_color_apply_str
-    {
-    % Retrieve color valur from prop
-    \str_set:Nx \l__ptxcd_box_color_apply_str {
-      \prop_item:Ne \l__ptxcd_box_color_tuda_prop { \str_use:N \l__ptxcd_box_color_apply_str}
+    \prop_if_in:NVT \l__ptxcd_box_color_tuda_prop \l__ptxcd_box_color_apply_str
+        {
+        % Retrieve color valur from prop
+        \str_set:Nx \l__ptxcd_box_color_apply_str {
+            \prop_item:Ne \l__ptxcd_box_color_tuda_prop { \str_use:N \l__ptxcd_box_color_apply_str}
+        }
     }
-  }
 
 % Side note box
-  \begin{tcolorbox}
-    [
-    arc=3pt, % Rounded borders
-    boxrule=0pt,
-    colback=\l__ptxcd_box_color_apply_str!5,
-    enhanced, % Enable customization
-    frame\space hidden,
-    left=5pt, % Left side margin
-    overlay={
-      \begin{tcbclipinterior}
-        \fill[\l__ptxcd_box_color_apply_str] (frame.south\space west) rectangle
-        ([xshift=4pt]frame.north\space west);
-      \end{tcbclipinterior}
-    }
-    ]
-    % Print title if it is not empty
-    \tl_if_empty:NF \l__ptxcd_box_title_tl {
-      \textbf{\tl_use:N \l__ptxcd_box_title_tl}
-      % Break line if option is on
-      \bool_if:NT \l__ptxcd_box_title_break_bool{
-        \\
-      }
-    }
-      }
-      {
-  \end{tcolorbox}
+    \begin{tcolorbox}
+        [
+        arc=3pt, % Rounded borders
+        boxrule=0pt,
+        colback=\l__ptxcd_box_color_apply_str!5,
+        enhanced, % Enable customization
+        frame\space hidden,
+        left=5pt, % Left side margin
+        overlay={
+            \begin{tcbclipinterior}
+                \fill[\l__ptxcd_box_color_apply_str] (frame.south\space west) rectangle
+                ([xshift=4pt]frame.north\space west);
+            \end{tcbclipinterior}
+        }
+        ]
+        % Print title if it is not empty
+        \tl_if_empty:NF \l__ptxcd_box_title_tl {
+            \textbf{\tl_use:N \l__ptxcd_box_title_tl}
+            % Break line if option is on
+            \bool_if:NT \l__ptxcd_box_title_break_bool{
+                \\
+            }
+        }
+            }
+            {
+    \end{tcolorbox}
 }
 
 %- Hyperref -%
 
 \hypersetup{
-  colorlinks=true,
-  linkcolor=black,
-  urlcolor=TUDa-2c,
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=TUDa-2c,
 }
 
 %- Paragraph -%
@@ -198,29 +198,29 @@
 % Push students to a sequence
 \newcommand{\authors}[1]{
 % Push author name to the right
-  \seq_put_right:Nn \l__ptxcd_author_seq {#1}
+    \seq_put_right:Nn \l__ptxcd_author_seq {#1}
 
 % Prepare author convention
-  \tl_set:Nx \c__ptxcd_namesr_tl {\seq_item:Nn \l__ptxcd_author_seq {1}}
+    \tl_set:Nx \c__ptxcd_namesr_tl {\seq_item:Nn \l__ptxcd_author_seq {1}}
 % Comma separated authors
-  \int_step_inline:nn {\seq_count:N \l__ptxcd_author_seq - 2}  {
-    \tl_set:Nx \c__ptxcd_namesr_tl {
-      \tl_use:N \c__ptxcd_namesr_tl, \space
-      \seq_item:Nn \l__ptxcd_author_seq {\int_eval:n {##1 + 1}}
+    \int_step_inline:nn {\seq_count:N \l__ptxcd_author_seq - 2}  {
+        \tl_set:Nx \c__ptxcd_namesr_tl {
+            \tl_use:N \c__ptxcd_namesr_tl, \space
+            \seq_item:Nn \l__ptxcd_author_seq {\int_eval:n {##1 + 1}}
+        }
     }
-  }
 % Last author will be separated with "and"
-  \int_compare:nNnTF {\seq_count:N \l__ptxcd_author_seq} > {1}
+    \int_compare:nNnTF {\seq_count:N \l__ptxcd_author_seq} > {1}
 % If more than two author exists, add an "and, else do nothing
-    {
-    \tl_set:Nx \c__ptxcd_namesr_tl {
-      \tl_use:N \c__ptxcd_namesr_tl
-      \authorsep\space
-      \seq_item:Nn \l__ptxcd_author_seq {\seq_count:N \l__ptxcd_author_seq}
-    }
-  }{}
+        {
+        \tl_set:Nx \c__ptxcd_namesr_tl {
+            \tl_use:N \c__ptxcd_namesr_tl
+            \authorsep\space
+            \seq_item:Nn \l__ptxcd_author_seq {\seq_count:N \l__ptxcd_author_seq}
+        }
+    }{}
 % Set authors
-  \author{\tl_use:N \c__ptxcd_namesr_tl}
+    \author{\tl_use:N \c__ptxcd_namesr_tl}
 }
 
 %- Additional configurations -%

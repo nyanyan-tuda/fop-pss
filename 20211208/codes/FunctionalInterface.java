@@ -1,5 +1,5 @@
 @FunctionalInterface
 public interface FunctionalInterface {
 
-  void apply();
+    void apply();
 }
