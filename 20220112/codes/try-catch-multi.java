@@ -7,5 +7,5 @@ try {
 } catch (IndexOutOfBoundsException | NullPointerException e) {
 	System.err.println("Invalid task");
 } catch (IllegalArgumentException e) {
-	System.err.println(e.getMessage());
+	throw e;
 }
