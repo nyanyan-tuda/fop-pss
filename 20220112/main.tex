@@ -95,7 +95,9 @@
             \item Spezielle abgeleitete Error-Klasse
             \item Java bietet eine sehr bequeme Sonderform mit AssertionError umzugehen
             \item Schlüsselwort: \inlinejava{assert}
-            \item Müssen aktiviert werden!
+            \begin{itemize}
+                \item Müssen aktiviert werden!
+            \end{itemize}
             \item Formaler Aufbau:
 
             \lstinputlisting[style=Java, label={lst:assertion-error}]{codes/assertion_error.java}
@@ -134,6 +136,18 @@
         \end{itemize}
 
         \lstinputlisting[style=Java, label={lst:exception}]{codes/exception.java}
+    \end{frame}
+
+    \begin{frame}[c]{Wieso eigene Exceptionklassen definieren?}
+        \textbf{Frage:} Ist es sinnvoll, eigene Exceptionklassen zu definieren? Welche Vorteile
+        ergeben sich hieraus?
+
+        \pause
+        \vskip 3em
+
+        \textbf{Antwort:} Bei eigenen Exception-Klassen können Informationen an den Konstruktor
+        übergeben werden, was die Fehlerbehandlung erleichtern kann und zum Beispiel für eine
+        detaillierte Ausgabe der Probleme sorgt.
     \end{frame}
 
     \subsection{RuntimeException}
@@ -188,6 +202,13 @@
             style=Java,
             label={lst:person}
         ]{codes/Person.java}
+    \end{frame}
+
+    \begin{frame}[c]{Alternativ}
+        \lstinputlisting[
+            style=Java,
+            label={lst:person-alternative}
+        ]{codes/Person_alternative.java}
     \end{frame}
 
     \subsection{Exception weiterreichen}
@@ -245,14 +266,30 @@
             \item Falls es keine passenden \inlinejava{catch}-Blöcke gibt, dann werden alle
             Blöcke ignoriert
             \item Auswertung ist von oben nach unten, d.h. wird eine Exception im ersten
-            \inlinejava{catch}-Block so werden die Operationen in dieser ausgeführt und die
-            anderen \inlinejava{catch}-Blöcke werden nicht mehr beachtet.
+            \inlinejava{catch}-Block behandelt, so werden die Operationen in dieser ausgeführt und
+            die anderen \inlinejava{catch}-Blöcke werden nicht mehr beachtet.
         \end{itemize}
         \lstinputlisting[style=Java, label={lst:try-catch}]{codes/try-catch.java}
     \end{frame}
 
     \begin{frame}[c]{Beispiel}
         \lstinputlisting[style=Java, label={lst:try-catch-multi}]{codes/try-catch-multi.java}
+    \end{frame}
+
+    \begin{frame}[c]{\inlinejava{try}-\inlinejava{catch}: Exception vs. RuntimeException}
+        \textbf{Frage:} Alle Exceptions, die nicht von der Klasse \inlinejava{RuntimeException}
+        direkt oder indirekt abgeleitet sind, müssen spätestens in der \inlinejava{main}-Methode
+        behandelt werden.
+        Wieso müssen \inlinejava{RuntimeException} nicht unbedingt behandelt
+        werden?
+
+        \pause
+        \vskip 3em
+
+        \textbf{Antwort:} Müsste man all diese Exception fangen, so wäre der komplette Code mit
+        \inlinejava{try}-\inlinejava{catch} Blöcken versehen werden und der Code wäre nicht mehr
+        zu lesen.
+        Deshalb müssen sie nicht gefangen oder geworfen werden und werden automatisch geworfen.
     \end{frame}
 
 
