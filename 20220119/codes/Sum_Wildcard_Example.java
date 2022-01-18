@@ -1,0 +1,10 @@
+List<Number> nl = new ArrayList<>();
+List<Integer> il = new ArrayList<>();
+List<Double> dl = new ArrayList<>();
+List<Long> ll = new ArrayList<>();
+List<Float> fl = new ArrayList<>();
+sum(nl);
+sum(il);
+sum(dl);
+sum(ll);
+sum(fl);

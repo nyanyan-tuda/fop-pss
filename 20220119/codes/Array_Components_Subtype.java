@@ -1,0 +1,10 @@
+byte b = 1;
+short s = 3;
+int i = 4;
+float f = 5.6f;
+long l = 7;
+double d = 8.9;
+Number[] numbers = new Number[6];
+numbers[0] = b; numbers[1] = s;
+numbers[2] = i; numbers[3] = f;
+numbers[4] = l; numbers[5] = d;
