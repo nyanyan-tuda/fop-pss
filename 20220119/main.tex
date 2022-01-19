@@ -330,7 +330,7 @@
 
     \begin{frame}[c]{Welchen Typ können wir in allen Fällen garantieren?}
         Alle Klassen erben direkt oder indirekt von der Klasse \inlinejava{Object}, also können
-        wir mindestens den Typ \inlinejava{Object} garantieren!
+        wir nur den Typ \inlinejava{Object} garantieren!
 
         \lstinputlisting[
             style=Java,
@@ -409,7 +409,7 @@
 
         \lstinputlisting[
             style=Java,
-            label={lst:sumt}
+            label={lst:sum}
         ]{codes/Sum.java}
 
         \pause
@@ -493,8 +493,8 @@
     \end{frame}
 
     \begin{frame}[c]{Welchen Typ können wir in allen Fällen garantieren?}
-        Alle Klassen sind Subtypen von \inlinejava{Number}, also können
-        wir mindestens den Typ \inlinejava{Number} garantieren!
+        Alle Klassen sind Subtypen von \inlinejava{Number}, also können wir nur den Typ
+        \inlinejava{Number} garantieren!
 
         \lstinputlisting[
             style=Java,
@@ -568,7 +568,7 @@
                 \inlinejava{List<?>} & \inlinejava{Object} und alle Subklassen von
                 \inlinejava{Object} & Nur \inlinejava{null} & \inlinejava{Object}
                 \\
-                \inlinejava{List<? super E>} & \inlinejava{E} und alle Basisklassen und
+                \inlinejava{List<? super E>} & \inlinejava{E}, alle Basisklassen und
                 implementierten Interfaces von \inlinejava{E} & \inlinejava{E} und alle
                 Subtypen von \inlinejava{E} & \inlinejava{Object}
                 \\
