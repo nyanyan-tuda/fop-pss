@@ -397,7 +397,7 @@
             \item Typparameter ist entweder
             \begin{itemize}
                 \item \inlinejava{T} oder
-                \item direkt oder indirekte Unterklasse von \inlinejava{T} oder
+                \item direkt oder indirekte Unterklasse von \inlinejava{T}
             \end{itemize}
             \item Formaler Aufbau: \inlinejava{? extends T}
             \item \inlinejava{?} = \inlinejava{? extends Object}
@@ -405,7 +405,7 @@
     \end{frame}
 
     \begin{frame}[c]{Beispiel}
-        Wir möchten dieser Summe von Zahlen in einer Liste bilden:
+        Wir möchten die Summe von Zahlen in einer Liste bilden:
 
         \lstinputlisting[
             style=Java,
@@ -414,7 +414,7 @@
 
         \pause
 
-        Das erlaubt uns nur dass Bilden einer Summe für den Typparameter
+        Das erlaubt uns nur das Bilden einer Summe für den Typparameter
         \inlinejava{Number}.
         Was machen wir, wenn wir die Summe von \inlinejava{Integer} oder \inlinejava{Double}
         bilden wollen, ohne redundanten Code zu schreiben?
@@ -435,7 +435,7 @@
     \end{frame}
 
     \begin{frame}{Lesen}
-        Welchen Typ können wir in der Zeile 3 lesen? (Außerdem Number)
+        Welchen Typ können wir in der Zeile 3 lesen? (Außer Number)
 
         \lstinputlisting[
             style=Java,
@@ -532,7 +532,7 @@
             \end{itemize}
             \item Tatsächlicher Listentyp: \inlinejava{Long}
             \begin{itemize}
-                \item Kann \inlinejava{Double} oder ein Subtyp dessen einfügen
+                \item Kann \inlinejava{Long} oder ein Subtyp dessen einfügen
                 \item Fehlerhafte Zeilen: 5, 6, 7
             \end{itemize}
             \item \dots
@@ -569,12 +569,11 @@
                 \inlinejava{Object} & Nur \inlinejava{null} & \inlinejava{Object}
                 \\
                 \inlinejava{List<? super E>} & \inlinejava{E} und alle Basisklassen und
-                implementierten Interfaces von \inlinejava{E} & Nur
-                \inlinejava{null} & \inlinejava{T}
+                implementierten Interfaces von \inlinejava{E} & \inlinejava{E} und alle
+                Subtypen von \inlinejava{E} & \inlinejava{Object}
                 \\
                 \inlinejava{List<? extends E>} & \inlinejava{E} und alle Subklassen von
-                \inlinejava{E} & \inlinejava{E} und alle Subtypen von \inlinejava{E} &
-                \inlinejava{Object}
+                \inlinejava{E} & Nur \inlinejava{null} & \inlinejava{E}
                 \\
                 \bottomrule
             \end{tabular}
