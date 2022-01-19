@@ -210,9 +210,9 @@
             \item Sei \inlinejava{X} eine generische Klasse mit einem Typparamer \inlinejava{T}:
             \begin{itemize}
                 \item Nach unten beschränkt: \inlinejava{X<}\underline{\inlinejava{? super
-                T}}\inlinejava{>}-- \emph{Lower bounded Wildcard}
+                T}}\inlinejava{>} -- \emph{Lower bounded Wildcard}
                 \item Nach oben beschränkt: \inlinejava{X<}\underline{\inlinejava{? extends
-                T}}\inlinejava{>}-- \emph{Upper bounded Wildcard}
+                T}}\inlinejava{>} -- \emph{Upper bounded Wildcard}
             \end{itemize}
         \end{itemize}
     \end{frame}
@@ -235,7 +235,7 @@
                 \item direkt oder indirekte Oberklassen von \inlinejava{T} oder
                 \item direkt oder indirekte implementierte Interfaces von \inlinejava{T}
             \end{itemize}
-            \item Formaler Aufbau: \inlinejava{? super T}
+            \item Formaler Aufbau: \inlinejava{X<? super T>} (\inlinejava{X} = generische Klasse)
         \end{itemize}
     \end{frame}
 
@@ -399,8 +399,8 @@
                 \item \inlinejava{T} oder
                 \item direkt oder indirekte Unterklasse von \inlinejava{T}
             \end{itemize}
-            \item Formaler Aufbau: \inlinejava{? extends T}
-            \item \inlinejava{?} = \inlinejava{? extends Object}
+            \item Formaler Aufbau: \inlinejava{X<? extends T>} (\inlinejava{X} = generische Klasse)
+            \item \inlinejava{X<?>} = \inlinejava{X<? extends Object>}
         \end{itemize}
     \end{frame}
 
@@ -583,7 +583,7 @@
     \end{frame}
 
 
-    \section{Arbeitsphase [80min]}
+    \section{Arbeitsphase [75min]}
     \label{sec:arbeitsphase}
     \begin{frame}[c]{Arbeitsphase}
         \begin{center}
