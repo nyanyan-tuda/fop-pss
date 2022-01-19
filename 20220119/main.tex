@@ -170,12 +170,12 @@
 
         \begin{enumerate}
             \item \inlinejava{ArrayStoreException}
-            \item Der Fehler wird erst zur Laufzeit erkannt, da der Komponententyp ein des
-            statischen Typs des Arrays ist
+            \item Der Fehler wird erst zur Laufzeit erkannt, da der Komponententyp ein Subtyp des
+            statischen Types des Arrays ist
         \end{enumerate}
     \end{frame}
 
-    \begin{frame}[c]{Wildcards [15min]}
+    \begin{frame}[c]{Wildcards}
         \begin{itemize}
             \item Wie sieht es mit Wilcards aus?
             \item Die Typparameter sind fest d.h. es ist nicht erlaubt, anstelle des eigentlichen
@@ -207,8 +207,13 @@
             \item Definition der Einschränkungen bei der \textbf{\emph{Instanziierung}} von
             Typparametern!
             \item Flexibilität von Typparamer von Objekten
-            \item Nach untend beschränkt: \inlinejava{? super T} -- \emph{Lower bounded Wildcard}
-            \item Nach oben beschränkt \inlinejava{? extends T} -- \emph{Upper bounded Wildcard}
+            \item Sei \inlinejava{X} eine generische Klasse mit einem Typparamer \inlinejava{T}:
+            \begin{itemize}
+                \item Nach unten beschränkt: \inlinejava{X<}\underline{\inlinejava{? super
+                T}}\inlinejava{>}-- \emph{Lower bounded Wildcard}
+                \item Nach oben beschränkt: \inlinejava{X<}\underline{\inlinejava{? extends
+                T}}\inlinejava{>}-- \emph{Upper bounded Wildcard}
+            \end{itemize}
         \end{itemize}
     \end{frame}
 
