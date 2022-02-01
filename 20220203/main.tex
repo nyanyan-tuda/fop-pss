@@ -1,0 +1,687 @@
+%! Author = Nhan Huynh
+%! Date = 17/01/2022
+
+% Preamble
+\documentclass{../tuda-beamer}
+\usepackage{xparse}
+\usepackage{natbib}
+
+% Tikz
+\usetikzlibrary{calc, shapes.multipart ,chains, arrows}
+\usetikzlibrary{arrows.meta}
+
+% Commands
+\NewDocumentEnvironment{linkedlist}{o}
+{
+
+    \tikzset{
+        single-linked/.style={
+            rectangle split,
+            rectangle split parts=2,
+            draw,
+            rectangle split horizontal,
+            thick,
+            on chain,
+        },
+    }
+
+    \NewDocumentCommand{\marktail}{m}{
+        \draw[shorten <= 1pt, shorten >= 1pt] (##1.north east) -- (##1.south west);
+        \draw[shorten <= 1pt, shorten >= 1pt] (##1.north west) -- (##1.south east);
+    }
+    \NewDocumentCommand{\connect}{m m}{
+        \draw[*->] let \p1=(##1.two), \p2=(##1.center) in (\x1,\y2) -- (##2);
+    }
+    \begin{tikzpicture}
+        [
+        >=stealth,
+        scale=\IfNoValueTF{#1}{1}{#1},
+        start chain,
+        transform shape,
+        ]
+            }
+            {
+    \end{tikzpicture}
+}
+
+
+% Title information
+\authors{Simon Hock}
+\authors{Nhan Huynh}
+\authors{Daniel Mangold}
+\date{02. Februar 2022}
+
+% Document
+\begin{document}
+    \maketitle
+
+    \begin{frame}{Überblick}
+        \tableofcontents
+    \end{frame}
+
+    \begin{frame}{ListItem [5min]}
+        \begin{minipage}[t]{.475\textwidth}
+            \lstinputlisting[style=Java, label={lst:listitem}]{codes/ListItem.java}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[t]{.475\textwidth}
+            \lstinputlisting[style=Java, label={lst:linkedlist}]{codes/MyLinkedList.java}
+        \end{minipage}
+
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a) {head};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a}] (b) {key};
+                    \node[right=of {b}] (c) {key};
+                    \node[right=of {c}] (d) {key};
+                \end{scope}
+
+                \node[right=of {d}] (e) {.....};
+
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {e}] (f) {key};
+                    \node[right=of {f}] (g) {key};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (h) {};
+                \marktail{h}
+
+                \draw[->] (a) -- (b);
+                \draw[->] (e) -- (f);
+                \connect{b}{c}
+                \connect{c}{d}
+                \connect{d}{e}
+                \connect{f}{g}
+                \connect{g}{h}
+            \end{linkedlist}
+            \caption{Eigene Linked List-Klasse auf Basis der Vorlesung}
+            \label{fig:linkedlist-example}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]{Analogie - Perlenkette}
+        \begin{minipage}{.475\textwidth}
+            \begin{itemize}
+                \item \inlinejava{MyLinkedList}: Perlenkette
+                \item \inlinejava{head}: Anfang der Perlenkette
+                \item \inlinejava{key}: Perle
+                \item \inlinejava{next}: Verbindung zwischen Perlen
+            \end{itemize}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{.475\textwidth}
+            \centering
+            \includegraphics[width=.8\textwidth]{graphics/pearls}
+            \captionof{figure}{Perlenkette}
+            \label{fig:pearls}
+        \end{minipage}
+    \end{frame}
+
+
+    \section{Rekursion [25min]}
+    \label{sec:recursion}
+    \begin{frame}[c]{Rekursion}
+        \begin{center}
+            \enquote{Eine Rekursion ist eine Funktion, die sich selbst aufruft. Dabei wird versucht
+            das Problem auf eine einfachere Variante des \textbf{gleichen} Problems rekursiv zu
+            reduzieren, welches dann gelöst wird.}
+        \end{center}
+    \end{frame}
+
+    \subsection{Vorgehensweise bei rekursiven Aufgaben}
+    \label{subsec:recursion-approach}
+    \begin{frame}[c]{Vorgehensweise bei rekursiven Aufgaben}
+        \begin{enumerate}
+            \item Identifiziere, wie das Problem auf eine einfachere Variante des Problems
+            zerlegt werden kann und direkt gelöst werden kann
+
+            \begin{itemize}
+                \item Teillösungen der Gesamtlösung
+            \end{itemize}
+            \item Das kleinste Problem ist ein Rekursionsanker
+            \item Überlege, wie die kleinen Probleme kombiniert werden können, um die
+            ursprüngliche Problemstellung zu lösen
+            \item Kombiniere die Teillösungen zu einer Gesamtlösung
+        \end{enumerate}
+    \end{frame}
+
+    \begin{frame}[c]{H10 H2.2}
+        \begin{itemize}
+            \item Wir möchten zwei Listen miteinander verknüpfen.
+            \item Die Verknüpfung ist folgendermaßen definiert:
+            \begin{enumerate}
+                \item Sei \(d_i\) ein Element aus der Zielliste, \(s_i\) ein Element aus der
+                Quellliste.
+                \item Falls das \inlinejava{BiPredicate} für \((d_i, s_i)\) \inlinejava{true}
+                zurückliefert, so wird das Element vor \(d_i\) in der Zielliste eingefügt.
+                \begin{enumerate}
+                    \item Wiederhole 2. mit \(d_{i + 1}\) und starte bei dem zuletzt
+                    betrachteten \(s_i\).
+                \end{enumerate}
+                \item Ansonsten wird das nächste Element von der Zielliste betrachtet \(s_{i +
+                1}\) und wiederhole 2.
+                \item Wir sind fertig, sobald alle Elemente der Quellliste betrachtet wurden.
+                \item Falls wir keine Elemente aus der Zielliste mehr betrachten, aber noch
+                Elemente aus der Quelläste betrachtet werden müssen, dann werden diese am Ende
+                der Zielliste angehängt.
+            \end{enumerate}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[c]{Parameter}
+        \begin{itemize}
+            \item \inlinejava{MyLinkedList<U> otherList}: Quelliste
+            \item \inlinejava{BiPredicate<? super T, ? super U> biPred}: Prädikat bestimmt, wo
+            das Element aus der Quelliste in die Zielliste eingefügt werden soll
+            \item \inlinejava{Function<? super U, ? extends T> fct}: Wandelt den Typ eines
+            Elements aus der Quellliste in den Typ eines Elements der Zielliste um
+            \item \inlinejava{Predicate<? super U> predU}: Prädikat bestimmt, ob ein Element aus
+            der Quelliste überhaupt aufgenommen werden darf. Ansonsten wird eine
+            \inlinejava{MyLinkedListException} geworfen
+        \end{itemize}
+        \vspace{-.5em}
+        \lstinputlisting[style=Java, label={lst:h2-2-signature}]{codes/H2_2_Signature.java}
+    \end{frame}
+
+    \begin{frame}[c]{Beispiel}
+        \begin{itemize}
+            \item Falls die Summe der beiden Elemente im \inlinejava{biPred} ungerade ist, so
+            wird das Element zur Zielliste aufgenommen
+            \item Zuerst müssen wir die Position von der \(1\) bestimmen
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_d) {6};
+                    \node[right=of {c_d}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_d}
+                \connect{c_d}{d_d}
+                \connect{d_d}{e_d}
+
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+                \draw[->, dashed] (biPred.east) -- (b_s);
+                \draw[->, dashed] (biPred.east) -- (b_d);
+                \draw[->, dashed] (biPred.east) -- (b_s);
+                \draw[->, dashed] (biPred.east) -- (b_d);
+                \draw[->, dashed] (biPred.east) -- (c_d);
+            \end{linkedlist}
+            \caption{Beispiel H2.2 - Bestimme Position von \(1\)}
+            \label{fig:h10-h2.2-example}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Füge die \(1\) hinzu.
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_ps) {1};
+                    \node[right=of {c_ps}] (c_d) {6};
+                    \node[right=of {c_d}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_ps}
+                \connect{c_ps}{c_d}
+                \connect{c_d}{d_d}
+                \connect{d_d}{e_d}
+
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+            \end{linkedlist}
+            \caption{Beispiel H2.2 - Füge \(1\) hinzu}
+            \label{fig:h10-h2.2-example-1}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Bestimme Position von \(2\).
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_ps) {1};
+                    \node[right=of {c_ps}] (c_d) {6};
+                    \node[right=of {c_d}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_ps}
+                \connect{c_ps}{c_d}
+                \connect{c_d}{d_d}
+                \connect{d_d}{e_d}
+
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+                \draw[->, dashed] (biPred.east) -- (c_s);
+                \draw[->, dashed] (biPred.east) -- (c_d);
+                \draw[->, dashed] (biPred.east) -- (d_d);
+            \end{linkedlist}
+            \caption{Beispiel H2.2}
+            \label{fig:h10-h2.2-example-2}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Füge \(2\) hinzu.
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_ps) {1};
+                    \node[right=of {c_ps}] (c_d) {6};
+                    \node[right=of {c_d}] (d_ps) {2};
+                    \node[right=of {d_ps}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_ps}
+                \connect{c_ps}{c_d}
+                \connect{c_d}{d_ps}
+                \connect{d_ps}{d_d}
+                \connect{d_d}{e_d}
+
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+            \end{linkedlist}
+            \caption{Beispiel H2.2 - Füge \(2\) hinzu}
+            \label{fig:h10-h2.2-example-3}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Bestimme Position von \(3\) hinzu.
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_ps) {1};
+                    \node[right=of {c_ps}] (c_d) {6};
+                    \node[right=of {c_d}] (d_ps) {2};
+                    \node[right=of {d_ps}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_ps}
+                \connect{c_ps}{c_d}
+                \connect{c_d}{d_ps}
+                \connect{d_ps}{d_d}
+                \connect{d_d}{e_d}
+
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+                \node (biPred) at (0, -1) {\inlinejava{biPred(T, U)}};
+                \draw[->, dashed] (biPred.east) -- (e_d);
+            \end{linkedlist}
+            \caption{Beispiel H2.2 - Füge \(2\) hinzu}
+            \label{fig:h10-h2.2-example-4}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[c]
+        \begin{itemize}
+            \item Wir sind am Ende der Zielliste \(\rightarrow\) Füge die restlichen Elemente von
+            der Quellliste in die Zielliste hinzu.
+            \item Wir sind nun fertig.
+        \end{itemize}
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.8]
+                \node (a_s) at (0, 0) {head\(_{\text{QuellListe}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_s}] (b_s) {1};
+                    \node[right=of {b_s}] (c_s) {2};
+                    \node[right=of {c_s}] (d_s) {3};
+                    \node[right=of {d_s}] (e_s) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (f_s) {};
+                \marktail{f_s}
+
+                \draw[->] (a_s) -- (b_s);
+                \connect{b_s}{c_s}
+                \connect{c_s}{d_s}
+                \connect{d_s}{e_s}
+                \connect{e_s}{f_s}
+
+                \node (a_d) at (0, -3) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_ps) {1};
+                    \node[right=of {c_ps}] (c_d) {6};
+                    \node[right=of {c_d}] (d_ps) {2};
+                    \node[right=of {d_ps}] (d_d) {7};
+                    \node[right=of {d_d}] (e_d) {3};
+                    \node[right=of {e_d}] (f_d) {4};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (g_d) {};
+                \marktail{g_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_ps}
+                \connect{c_ps}{c_d}
+                \connect{c_d}{d_ps}
+                \connect{d_ps}{d_d}
+                \connect{d_d}{e_d}
+                \connect{e_d}{f_d}
+                \connect{f_d}{g_d}
+            \end{linkedlist}
+            \caption{Beispiel H2.2 - Füge die restlichen Elemente hinzu}
+            \label{fig:h10-h2.2-example-5}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}{Welche Fälle müssen wir generell bei ListItem?}
+        \begin{itemize}
+            \item Operation wird in der Mitte ausgeführt
+            \item Operation wird am Anfang ausgeführt (Sonderfall einmalig)
+            \item Operation wird am Ende ausgeführt (Sonderfall einmalig)
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Operation wird in der Mitte ausgeführt}
+        \begin{enumerate}
+            \item Identifiziere, wie das Problem auf eine einfachere Variante des Problems
+            zerlegt werden kann und direkt gelöst werden kann
+        \end{enumerate}
+
+        \begin{itemize}
+            \item Wir betrachten ein Element
+            \item Falls das Prädikat zutrifft, dann erstelle eine Liste und füge das Element hinzu
+            \item Ansonsten mache nichts
+        \end{itemize}
+
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (biPred) at (0, 0) {\inlinejava{biPred(T, U)}};
+                \node[single-linked] at (0, -2) (a) {key};
+
+                \draw[->, dashed] (biPred.south) --
+                node[left] {\inlinejava{true} oder \inlinejava{false}?} (a);
+
+            \end{linkedlist}
+            \caption{Identifiziere Problem}
+            \label{fig:h10-h2.2-identify-problem}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}
+        \begin{enumerate}
+            \setcounter{enumi}{1}
+            \item Das kleinste Problem ist ein Rekursionsanker
+        \end{enumerate}
+
+        \begin{itemize}
+            \item Kleinstes Problem: Quellliste ist leer \(\rightarrow\) Wir müssen nichts mehr
+            machen
+        \end{itemize}
+
+        \vspace{2em}
+
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s) at (0, 0) {head\(_{\text{Zielliste}}\)};
+                \node[thick, on chain, draw,inner sep=6pt, right=of {a_s}] (b_s) {};
+                \marktail{b_s}
+
+                \draw[->] (a_s) -- (b_s);
+
+                \node (a_d) at (0, -1) {head\(_{\text{Zielliste}}\)};
+                \begin{scope}[every node/.style=single-linked]
+                    \node[right=of {a_d}] (b_d) {5};
+                    \node[right=of {b_d}] (c_d) {6};
+                    \node[right=of {c_d}] (d_d) {7};
+                \end{scope}
+
+                \node[thick, on chain, draw,inner sep=6pt] (e_d) {};
+                \marktail{e_d}
+
+                \draw[->] (a_d) -- (b_d);
+                \connect{b_d}{c_d}
+                \connect{c_d}{d_d}
+                \connect{d_d}{e_d}
+            \end{linkedlist}
+            \caption{Kleinstes Problem}
+            \label{fig:h10-h2.2-smallest-problem}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}
+        \lstinputlisting[style=Java, label={lst:recursion-anchor}]{codes/H2_2_Recursion_Anchor.java}
+    \end{frame}
+
+    \begin{frame}
+        \begin{enumerate}
+            \setcounter{enumi}{2}
+            \item Überlege, wie die kleinen Probleme kombiniert werden können, um die
+            ursprüngliche Problemstellung zu lösen
+        \end{enumerate}
+
+        \begin{figure}[h]
+            \centering
+            \begin{linkedlist}[.9]
+                \node (a_s1) at (0, 0) {head};
+                \node[single-linked, right=of {a_s1}] (b_s1) {1};
+                \node[thick, on chain, draw,inner sep=6pt, right=of {b_s1}] (c_s1) {};
+                \marktail{c_s1}
+                \draw[->] (a_s1) -- (b_s1);
+                \connect{b_s1}{c_s1}
+
+                \node (a_s2) at (0, -2) {head};
+                \node[single-linked, right=of {a_s2}] (b_s2) {6};
+                \node[thick, on chain, draw,inner sep=6pt, right=of {b_s2}] (c_s2) {};
+                \marktail{c_s2}
+                \draw[->] (a_s2) -- (b_s2);
+                \connect{b_s2}{c_s2}
+
+                %let \p1=(##1.two), \p2=(##1.center) in (\x1,\y2) -- (##2);
+                \draw[->, dashed] let  \p1=(b_s1.two), \p2=(b_s1.center) in (\x1,\y2) --
+                node[right] {Kombinieren} (b_s2);
+            \end{linkedlist}
+            \caption{Visualisierung von Kombinieren}
+            \label{fig:h10-h2.2-combine}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}
+        \begin{enumerate}
+            \setcounter{enumi}{3}
+            \item Kombiniere die Teillösungen zu einer Gesamtlösung
+        \end{enumerate}
+
+        \begin{itemize}
+            \item Wir können nur Elemente von der Quellliste einfügen, sofern der Prädikat
+            \inlinejava{predU} erfüllt wird
+        \end{itemize}
+
+        \lstinputlisting[style=Java, label={lst:check}]{codes/H2_2_Check.java}
+    \end{frame}
+
+    \begin{frame}
+        \begin{enumerate}
+            \setcounter{enumi}{3}
+            \item Kombiniere die Teillösungen zu einer Gesamtlösung
+        \end{enumerate}
+
+        \begin{itemize}
+            \item Am besten arbeiten wir mit dem Nachfolger, damit wir immer vorher einfügen können
+            \item Einfügen erfolgt nur, wenn \inlinejava{biPred} erfüllt ist
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \lstinputlisting[style=Java, label={lst:insert}]{codes/H2_2_Insert.java}
+    \end{frame}
+
+    \begin{frame}
+        \begin{itemize}
+            \item Zum Schluss müssen wir zum nächsten Element gehen und wiederholen das ganze erneut
+        \end{itemize}
+
+        \lstinputlisting[style=Java, label={lst:next}]{codes/H2_2_Next.java}
+    \end{frame}
+
+    \begin{frame}{Was fehlt noch?}
+        \begin{itemize}
+            \item Spezialfälle mit erstes und letztes Element
+            \item Wenn wir am Ende der Zielliste angekommen sind, dann fügen wir alle Elemente
+            danach ein
+            \item Der \inlinejava{else}-Teil wird nur ausgeführt, wenn \inlinejava{pDest.next ==
+                null} gilt, also wenn wir am Ende der Zielliste angekommen sind
+        \end{itemize}
+
+        \lstinputlisting[style=Java, label={lst:insert-last}]{codes/H2_2_Insert_Last.java}
+    \end{frame}
+
+    \begin{frame}[allowframebreaks, c]
+        \lstinputlisting[style=Java, label={lst:insert-helper}]{codes/H2_2_Helper.java}
+    \end{frame}
+
+    \begin{frame}{Spezialfall: Erstes Element}
+        \begin{itemize}
+            \item Momentan funktioniert die Methode nur für alle Elemente nach dem ersten Element...
+            \item Wie können wir das ändern? \(\rightarrow\) Wir fügen einen
+            \enquote{Dummy}-Element vor der eigentlichen Liste ein, damit das erste Element das
+            zweite ist und somit unsere Implementierung funktioniert!
+            \item Der Nachfolger vom \enquote{Dummy}-Element enthält das ggf. \enquote{neue}
+            erste Element der Liste
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[allowframebreaks]
+        \lstinputlisting[style=Java, label={lst:insert-main}]{codes/H2_2_Main.java}
+    \end{frame}
+
+
+    \section{Arbeitsphase [70min]}
+    \label{sec:arbeitsphase}
+    \begin{frame}[c]{Arbeitsphase}
+        \begin{center}
+            \textbf{\LARGE Selbstständiges Arbeiten}
+        \end{center}
+    \end{frame}
+\end{document}
