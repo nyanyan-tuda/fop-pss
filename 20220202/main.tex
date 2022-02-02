@@ -164,7 +164,7 @@
                 1}\) und wiederhole 2.
                 \item Wir sind fertig, sobald alle Elemente der Quellliste betrachtet wurden.
                 \item Falls wir keine Elemente aus der Zielliste mehr betrachten, aber noch
-                Elemente aus der Quelläste betrachtet werden müssen, dann werden diese am Ende
+                Elemente aus der Quelliste betrachtet werden müssen, dann werden diese am Ende
                 der Zielliste angehängt.
             \end{enumerate}
         \end{itemize}
@@ -493,7 +493,7 @@
         \end{figure}
     \end{frame}
 
-    \begin{frame}{Welche Fälle müssen wir generell bei ListItem?}
+    \begin{frame}{Welche Fälle müssen wir generell bei ListItem betrachten?}
         \begin{itemize}
             \item Operation wird in der Mitte ausgeführt
             \item Operation wird am Anfang ausgeführt (Sonderfall einmalig)
@@ -503,8 +503,8 @@
 
     \begin{frame}{Operation wird in der Mitte ausgeführt}
         \begin{enumerate}
-            \item Identifiziere, wie das Problem auf eine einfachere Variante des Problems
-            zerlegt werden kann und direkt gelöst werden kann
+            \item Identifiziere, wie das Problem in eine einfachere Variante des Problems
+            zerlegt und direkt gelöst werden kann
         \end{enumerate}
 
         \begin{itemize}
@@ -544,7 +544,7 @@
         \begin{figure}[h]
             \centering
             \begin{linkedlist}[.9]
-                \node (a_s) at (0, 0) {head\(_{\text{Zielliste}}\)};
+                \node (a_s) at (0, 0) {head\(_{\text{Quellliste}}\)};
                 \node[thick, on chain, draw,inner sep=6pt, right=of {a_s}] (b_s) {};
                 \marktail{b_s}
 
@@ -614,7 +614,7 @@
         \end{enumerate}
 
         \begin{itemize}
-            \item Wir können nur Elemente von der Quellliste einfügen, sofern der Prädikat
+            \item Wir können nur Elemente von der Quellliste einfügen, sofern das Prädikat
             \inlinejava{predU} erfüllt wird
         \end{itemize}
 
@@ -647,7 +647,7 @@
 
     \begin{frame}{Was fehlt noch?}
         \begin{itemize}
-            \item Spezialfälle mit erstes und letztes Element
+            \item Spezialfälle mit erstem und letztem Element
             \item Wenn wir am Ende der Zielliste angekommen sind, dann fügen wir alle Elemente
             danach ein
             \item Der \inlinejava{else}-Teil wird nur ausgeführt, wenn \inlinejava{pDest.next ==
@@ -664,9 +664,9 @@
     \begin{frame}{Spezialfall: Erstes Element}
         \begin{itemize}
             \item Momentan funktioniert die Methode nur für alle Elemente nach dem ersten Element...
-            \item Wie können wir das ändern? \(\rightarrow\) Wir fügen einen
-            \enquote{Dummy}-Element vor der eigentlichen Liste ein, damit das erste Element das
-            zweite ist und somit unsere Implementierung funktioniert!
+            \item Wie können wir das ändern? \(\rightarrow\) Wir fügen ein
+            \enquote{Dummy}-Element vor der eigentlichen Liste ein, damit das erste Element
+            tatsächlich das zweite ist und somit unsere Implementierung funktioniert!
             \item Der Nachfolger vom \enquote{Dummy}-Element enthält das ggf. \enquote{neue}
             erste Element der Liste
         \end{itemize}
